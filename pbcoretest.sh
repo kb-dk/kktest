@@ -23,7 +23,7 @@ find "$1" | grep xml$ | while read I; do rm -f datotjek; touch datotjek; cat "$I
 echo . | tee -a output
 echo checking end dates after start dates | tee -a output
 echo . | tee -a output
-find "$1" | grep xml$ | while read I; do START=$(cat "$I" | grep dateAvailableStart | egrep '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}' | cut -d'>' -f2 | cut -d'<' -f1); END=$(cat "$I" | grep dateAvailableEnd | egrep '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}' | cut -d'>' -f2 | cut -d'<' -f1); if [ ! -z $START ]; then if [ ! -z $END ]; then START1=$(date -d "$START" "+%s" 2>/dev/null); END1=$(date -d "$END" "+%s" 2>/dev/null); if [ ! -z $START1 ]; then if [ ! -z $END1 ]; then if [ ! $END1 -ge $START1 ]; then echo End before Start ERROR: $START $END $I | tee -a output; fi; else echo End invalid: $END $END1 $I | tee -a output; fi; else echo Start invalid: $START $START1 $I | tee -a output; fi; fi; fi done
+find "$1" | grep xml$ | while read I; do START=$(cat "$I" | grep dateAvailableStart | egrep '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}' | cut -d'>' -f2 | cut -d'<' -f1); END=$(cat "$I" | grep dateAvailableEnd | egrep '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}' | cut -d'>' -f2 | cut -d'<' -f1); if [ ! -z $START ]; then if [ ! -z $END ]; then START1=$(date -d "$START" "+%s" 2>/dev/null); END1=$(date -d "$END" "+%s" 2>/dev/null); if [ ! -z $START1 ]; then if [ ! -z $END1 ]; then if [ ! $END1 -ge $START1 ]; then echo End before Start ERROR: $START $END $I | tee -a output; fi; else echo End invalid: $END $END1 $I | tee -a output; fi; else echo Start invalid: $START $START1 $I | tee -a output; fi; fi; fi; done
 echo . | tee -a output
 echo checking for multiple publishers in one XML field | tee -a output
 echo . | tee -a output
