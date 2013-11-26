@@ -11,5 +11,5 @@ echo "####" >> output
 echo "####" >> output
 cat log >> output
 cp output output.txt
-echo "see attachment" | mail -s"$T" -a output.txt dla@statsbiblioteket.dk
+echo "see attachment" | mail -s"$T" -a output.txt dla@statsbiblioteket.dk,kfc@statsbiblioteket.dk,mfo@statsbiblioteket.dk
 
