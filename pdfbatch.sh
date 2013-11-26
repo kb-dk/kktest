@@ -103,7 +103,9 @@ if [ $DEBUG -eq 1 ]; then echo MODS indholds-tjek; fi
 MODSIDENTIFIER=$(xpath -q -e "/mods:mods/mods:identifier[@type='local']/text()" "$D/$MODSXML/$B-MODS.xml"); if [ ! $MODSIDENTIFIER == $B ]; then echo "Fejl i MODS-fil - identifier er forkert. Forventet $B, var $MODSIDENFIER"; fi
 MODSTIFFFIL="$(xpath -q -e "/mods:mods/mods:relatedItem/mods:identifier[@type='local']/text()" "$D/$MODSXML/$B-MODS.xml"|cut -d\" -f2).tif"; MODSTIFFDIR=$(echo $MODSTIFFFIL|cut -d_ -f1); if [ ! -e $TIFFHOME/$MODSTIFFDIR/$MODSTIFFFIL ]; then echo "Fejl i MODS-fil - refereret TIFF-fil ($MODSTIFFFIL) ukendt"; fi
 MODSSTARTDATE=$(xpath -q -e "/mods:mods/mods:subject/mods:temporal[@point='start']/text()" "$D/$MODSXML/$B-MODS.xml"); MODSENDDATE=$(xpath -q -e "/mods:mods/mods:subject/mods:temporal[@point='end']/text()" "$D/$MODSXML/$B-MODS.xml"); TIFFSTARTDATE=$(echo $MODSTIFFFIL|cut -d- -f1|tr . -); TIFFENDDATE=$(echo $MODSTIFFFIL|cut -d- -f2|cut -d_ -f1|tr . -); if [ $MODSSTARTDATE \< $TIFFSTARTDATE ] || [ $MODSSTARTDATE \> $TIFFENDDATE ] || [ $MODSENDDATE \< $TIFFSTARTDATE ] || [ $MODSENDDATE \> $TIFFENDDATE ]; then echo "Fejl i MODS-fil - start/stopdatoer $MODSSTARTDATE - $MODSENDDATE udenfor TIFF-filens start/stop-datoer $TIFFSTARTDATE - $TIFFENDDATE"; fi
-FILENAMEDATE=$(echo $B|cut -d- -f2-4); if [ $MODSSTARTDATE \> $FILENAMEDATE ] || [ $MODSENDDATE \< $FILENAMEDATE ]; then echo "Fejl i MODS-fil - start/stopdatoer $MODSSTARTDATE - $MODSENDDATE udenfor filnavnsdato $FILENAMEDATE"; fi
+FILENAMEDATE=$(echo $B|cut -d- -f2-4); if [ $MODSSTARTDATE != $FILENAMEDATE ]; then echo "Fejl i MODS-fil - startdato $MODSSTARTDATE forskellig fra filnavnsdato $FILENAMEDATE"; fi
+FILENAMESUFFIX=$(echo $B|cut -d_ -f2|cut -d. _f1|sed -e 's/^0*//'); TIFFSUFFIX=$(echo $MODSTIFFFIL|cut -d_ -f2|cut -d. -f1|sed -e 's/^0*//'); if [ $FILENAMESUFFIX != $TIFFSUFFIX ]; then echo "Fejl i MODS-fil - MODS-fil slutter med $FILENAMESUFFIX, men refereret TIFF-fil slutter med $TIFFSUFFIX."; fi
+PDFSIZE=$(stat -c %s  "$D/$PDF/"$B.pdf); if [ $PDFSIZE -lt 200000 ]; then echo "Meget lille PDF-fil: filstørrelse $PDFSIZE"; fi
 
 done | tee -a $LOGFILE
 #./ditte "$1"
