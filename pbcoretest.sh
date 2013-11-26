@@ -59,7 +59,7 @@ find "$1" | grep xml$ | while read I; do START=$(cat "$I" | grep dateAvailableSt
 echo . | tee -a output
 echo checking tiff files exist
 echo . | tee -a output
-find "$1" | grep xml$ | while read I; do TIFFFILE=$(cat "$I" | grep "<formatLocation>" | egrep -o "[0-9]{4}\.[0-9]{2}\.[0-9]{2}-[0-9]{4}\.[0-9]{2}\.[0-9]{2}_[0-9]+\.tif"); TIFFSUBDIR=$(echo $TIFFFILE | cut -d_ -f1 ); if [ ! -f "$TIFFDIR/$TIFFSUBDIR/$TIFFFILE" ] ; then echo "TIFF file $TIFFDIR/$TIFFSUBDIR/$TIFFFILE" referred in "$I" not found | tee -a output; fi; done
+find "$1" | grep xml$ | while read I; do TIFFFILE=$(cat "$I" | grep "<formatLocation>" | cut -d ">" -f2 | cut -d "<" -f1); TIFFSUBDIR=$(echo $TIFFFILE | cut -d_ -f1 ); if [ ! -f "$TIFFDIR/$TIFFSUBDIR/$TIFFFILE" ] ; then echo "TIFF file $TIFFDIR/$TIFFSUBDIR/$TIFFFILE" referred in "$I" not found | tee -a output; fi; done
 echo . | tee -a output
 
 echo FINISH
