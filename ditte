@@ -1,7 +1,7 @@
 #!/bin/bash
 echo $1 > output
 echo Error report >> output
-./visfejl.sh >> output
+./showerrors.sh >> output
 echo "####" >> output
 echo "####" >> output
 echo XML error report >> output
