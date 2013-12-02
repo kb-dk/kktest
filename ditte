@@ -1,10 +1,10 @@
 #!/bin/bash
 echo $1 > output
-echo fejl-rapport >> output
+echo Error report >> output
 ./visfejl.sh >> output
 echo "####" >> output
 echo "####" >> output
-echo XML-fejl-rapport >> output
+echo XML error report >> output
 ./check_failed_xml.sh "$1" >> output
 T=$1
 echo "####" >> output
