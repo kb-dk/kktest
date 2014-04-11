@@ -1,0 +1,15 @@
+#!/bin/bash
+echo $1 > output
+echo Error report >> output
+./showerrors.sh >> output
+echo "####" >> output
+echo "####" >> output
+echo XML error report >> output
+./check_failed_xml.sh "$1" >> output
+T=$1
+echo "####" >> output
+echo "####" >> output
+cat log >> output
+cp output output.txt
+echo "see attachment" | mail -s"$T" -a output.txt kw@statsbiblioteket.dk,kfc@statsbiblioteket.dk,gve@statsbiblioteket.dk,bja@statsbiblioteket.dk
+
