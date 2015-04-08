@@ -1,5 +1,5 @@
 #!/bin/bash
-D=$1
+D="$1"
 ANTAL=0
 DEBUG=0
 LOGFILE=log
@@ -40,7 +40,7 @@ MD=$(md5sum "${MODSFILE}" | awk '{print $1}')
 if [ -z $MD ]; then MD="FOOBAR"; fi
 MDTEST2=$(egrep -i $MD "${MODSFILE}.md5" | wc -l);  if [ ! $MDTEST2 -eq 1 ]; then echo Error in MD5 for MODS in MD5 file: $F; fi
 
-if [ "$T" == "$PAGEFOLDER" ] && [[ ! "$P" == *"$NOALTO"* ]] ; then
+if [[ ! "$P" == *"$NOALTO"* ]] ; then
 if [ $DEBUG -eq 1 ]; then echo ALTO check; fi
 if [ ! -f "${ALTOFILE}" ]; then echo Error: Missing ALTO: $F; FEJL=$(echo $FEJL+1|bc); fi
 if [ ! -f "${ALTOFILE}.md5" ]; then echo Error: Missing checksum for ALTO: $F; FEJL=$(echo $FEJL+1|bc); fi
@@ -94,7 +94,7 @@ tiffinfo -D "${TIFFFILE}" >& /dev/null; if [ ! "$?" -eq 0 ]; then echo Error in 
 fi
 
 if [ $DEBUG -eq 1 ]; then echo MODS contents check; fi
-MODSIDENTIFIER=$(xpath -q -e "/mods/identifier[@type='Statsbiblioteket, kvindekilder']/text()" "${MODSFILE}"); if [ ! "$MODSIDENTIFIER" == "$B" ]; then echo "Error in MODS file - wrong identifier. Expected $B, was $MODSIDENTIFIER"; fi
+MODSIDENTIFIER=$(xpath "${MODSFILE}" "/mods/identifier[@type='Statsbiblioteket, kvindekilder']/text()" 2>/dev/null); if [ ! "$MODSIDENTIFIER" == "$B" ]; then echo "Error in MODS file - wrong identifier. Expected $B, was $MODSIDENTIFIER"; fi
 WRONGUTF8=$(grep "\(Ã¦\|Ã¸\|Ã¥\|Ã\|Ã\|Ã\)" "${MODSFILE}"|wc -l); if [ ! "$WRONGUTF8" -eq 0 ]; then echo "Error in MODS file - contains illegal characters. Probably wrong encoding"; fi
 
 if [ $DEBUG -eq 1 ]; then echo PDF contents check; fi
